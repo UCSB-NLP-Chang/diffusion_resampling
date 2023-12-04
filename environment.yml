@@ -1,0 +1,28 @@
+name: resampling
+channels:
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.9
+  - pip
+  - numpy
+  - click
+  - pillow
+  - scipy
+  - pytorch=1.13.1
+  - psutil
+  - requests
+  - tqdm
+  - imageio
+  - pip:
+    - imageio-ffmpeg>=0.4.3
+    - pyspng
+    - diffusers==0.18.0
+    - fuzzywuzzy
+    - python-Levenshtein
+    - inflect
+    - nltk
+    - spacy
+    - transformers==4.28.0
+    - torchvision==0.14.1
+    - gdown
