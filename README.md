@@ -1,6 +1,6 @@
 # Correcting Diffusion Generation through Resampling
 
-This is the official impelmenation of the paper "Correcting Diffusion Generation through Resampling".
+This is the official impelmenation of the paper [Correcting Diffusion Generation through Resampling](https://arxiv.org/abs/2312.06038).
 
 <img src="assets/example1.png" width=1000px>
 
