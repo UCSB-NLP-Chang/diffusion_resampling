@@ -87,7 +87,7 @@ Below are the detailed steps to reproduce the results.
   $2: diffusion sampler, choose from {restart, edm}
   $3: restart configuration index (for Restart sampler), or number of steps (for EDM sampler)
   ```
-  To get the results in the paper, for ImageNet and Restart sampler, use `$3=2,3,4,5,6`, for ImageNet and EDM sampler, use `$3=64,128,256,384`, for FFHQ and Restart sampler, use `$3=0,1,2,3`, for FFHQ and EDM sampler, use `$3=32,64,128,200`. 
+  To get the results in the paper, for ImageNet and Restart sampler, use `$3` in one of `2,3,4,5,6`, for ImageNet and EDM sampler, use `$3` in `64,128,256,384`, for FFHQ and Restart sampler, use `$3` in `0,1,2,3`, for FFHQ and EDM sampler, use `$3` in `32,64,128,200`.
   
 ## 3) Evaluate FID
   - The statistics files from [EDM](https://github.com/NVlabs/edm) are already downloaded in step 1.

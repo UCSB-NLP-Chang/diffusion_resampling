@@ -86,6 +86,7 @@ def main():
         args.prompt_end = len(texts)
     
     if args.method == 'pf-hybrid':
+        # Load pre-computed object occurrence probability
         dataset_name = args.prompt_file.split('/')[-1].split('.')[0]
         object_occurrence_file = f'stats/{dataset_name}_probs_{args.sampler}.npy'
         object_occur_prob = torch.from_numpy(np.load(object_occurrence_file)).to(args.device)
@@ -136,14 +137,16 @@ def main():
     
     # Generate for each text
     with torch.no_grad():
-        for text_ind, text_desc in enumerate(texts[args.prompt_start: args.prompt_end], start=args.prompt_start):
+        for text_ind, text_desc in tqdm(enumerate(texts[args.prompt_start: args.prompt_end],
+                start=args.prompt_start), total=args.prompt_end-args.prompt_start, desc='Generating for text prompts...'):
             
             os.makedirs(f'{args.figure_dir}/{text_ind}', exist_ok=True)
             exist_files = os.listdir(f'{args.figure_dir}/{text_ind}')
             if len(exist_files) == args.num_generation:
                 print(f"Skipping {text_ind}")
                 continue
-
+            
+            # Get object indices in MS-COCO
             _, _, coco_indices = get_np_indices(text_desc, nlp, stopwords_list)
             coco_indices = torch.tensor(coco_indices, device=args.device)
             # Encode input prompt
@@ -176,7 +179,7 @@ def main():
             total_restart_ind = 0
             
             # Denoising loop
-            for step_ind, (sigma_cur, sigma_next) in tqdm(enumerate(zip(sigma_steps[:-1], sigma_steps[1:]))):
+            for step_ind, (sigma_cur, sigma_next) in enumerate(zip(sigma_steps[:-1], sigma_steps[1:])):
                 
                 if args.sampler == 'edm':
                     # Calculate weight and resample
@@ -199,6 +202,7 @@ def main():
                         xt = xt + (sigma_hat ** 2 - sigma_cur ** 2).sqrt() * args.S_noise * torch.randn_like(xt)
                         sigma_cur = sigma_hat
                 
+                # Denosing step
                 xt_next = []
                 num_samples = xt.shape[0]
                 for sample_ind in range(0, num_samples, args.batch_size):

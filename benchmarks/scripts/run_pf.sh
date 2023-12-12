@@ -9,7 +9,7 @@ echo "Running on $1"
 echo "Diffusion sampler: $2"
 echo "Number of particles: $3"
 
-num_images=(($3 * 50000))
+num_images=$(($3 * 50000 - 1))
 
 # Check the dataset name
 if [ "$1" == "imagenet" ]; then
@@ -27,7 +27,7 @@ if [ "$1" == "imagenet" ]; then
     elif [ "$2" == "edm" ]; then
         S_max=50
         S_min=0.05
-        S_churn=((64 / 256.0 * 40))
+        S_churn=$(echo "scale=2; 64 / 256.0 * 40" | bc)
         resample_inds=31,35,39,43,47,51
     else
         echo "Diffusion sampler must be either 'restart' or 'edm'"
@@ -47,7 +47,7 @@ elif [ "$1" == "ffhq" ]; then
     elif [ "$2" == "edm" ]; then
         S_max=50
         S_min=0.05
-        S_churn=((64 / 256.0 * 10))
+        S_churn=$(echo "scale=2; 64 / 256.0 * 10" | bc)
         resample_inds=15,19,23,27
     else
         echo "Diffusion sampler must be either 'restart' or 'edm'"
@@ -67,4 +67,4 @@ python3 generate.py --network ${net} --outdir=samples/pf/${1}_${2}_${3} \
     --num_particles $3 --seeds 0-${num_images} --batch 100 --resample_inds=${resample_inds}
 
 # Select best image
-python select_top_k.py --indir samples/pf/${1}_${2}_${3} --outdir samples/pf/${1}_${2}_${3}/out --best_of_n $3
+python select_top_k.py --indir samples/pf/${1}_${2}_${3} --outdir samples/pf/${1}_${2}_${3}/best --best_of_n $3

@@ -24,7 +24,7 @@ if [ "$1" == "imagenet" ]; then
     elif [ "$2" == "edm" ]; then
         S_max=50
         S_min=0.05
-        S_churn=((64 / 256.0 * 40))
+        S_churn=$(echo "scale=2; 64 / 256.0 * 40" | bc)
         dg_weight=1.1
     else
         echo "Diffusion sampler must be either 'restart' or 'edm'"
@@ -44,7 +44,7 @@ elif [ "$1" == "ffhq" ]; then
     elif [ "$2" == "edm" ]; then
         S_max=50
         S_min=0.05
-        S_churn=((64 / 256.0 * 10))
+        S_churn=$(echo "scale=2; 64 / 256.0 * 10" | bc)
     else
         echo "Diffusion sampler must be either 'restart' or 'edm'"
         exit 1
@@ -58,13 +58,13 @@ fi
 if [ "$2" == "restart" ]; then
     python3 generate.py --network ${net} --outdir=samples/dg/${1}_${2}_${3} \
         --sampler $2 --method dg --cond=${cond} --dg_weight_1st_order=${dg_weight} \
-        --discriminator_ckpt=${discriminator} --restart_info='${restart_info}' \
+        --discriminator_ckpt=${discriminator} --restart_info="${restart_info}" \
         --S_churn=${S_churn} --S_min=${S_min} --S_max=${S_max} --S_noise=1.003 \
-        --num_particles 1 --seeds 0-49999 --batch 100 --resample_inds=-1 --boosting 1
+        --num_particles 1 --seeds 0-49999 --batch 100 --resample_inds=-1
 else
     python3 generate.py --network ${net} --outdir=samples/dg/${1}_${2}_${3} \
         --sampler $2 --method dg --cond=${cond} --dg_weight_1st_order=${dg_weight} \
         --discriminator_ckpt=${discriminator} --steps $3 \
         --S_churn=${S_churn} --S_min=${S_min} --S_max=${S_max} --S_noise=1.003 \
-        --num_particles 1 --seeds 0-49999 --batch 100 --resample_inds=-1 --boosting 1
+        --num_particles 1 --seeds 0-49999 --batch 100 --resample_inds=-1
 fi

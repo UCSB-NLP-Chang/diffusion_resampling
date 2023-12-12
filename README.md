@@ -20,6 +20,18 @@ python -m spacy download en_core_web_sm
 The detailed steps for text-to-image generation and unconditional and class-conditioned generation are in the folder [text_to_image](text_to_image) and [benchmarks](benchmarks) respectively.
 
 ## References
+If you find our work useful for your research, please consider citing our paper:
+```
+@misc{liu2023correcting,
+      title={Correcting Diffusion Generation through Resampling}, 
+      author={Yujian Liu and Yang Zhang and Tommi Jaakkola and Shiyu Chang},
+      year={2023},
+      eprint={2312.06038},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
 Our implementation is based on following repos:
 * https://github.com/NVlabs/edm
 * https://github.com/alsdudrla10/DG
